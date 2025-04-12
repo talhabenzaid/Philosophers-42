@@ -10,10 +10,10 @@ void *test(void *add)
 int main()
 {
     pthread_t t1;
-    // pthread_t t2;
+    pthread_t t2;
     long value1 = 1;
     pthread_create(&t1,NULL,test,(void *) &value1);
-    // pthread_create(&t2,NULL,test,NULL);
+    pthread_create(&t2,NULL,test,NULL);
     pthread_join(t1,NULL);
-    // pthread_join(t2,NULL);
+    pthread_join(t2,NULL);
 }
