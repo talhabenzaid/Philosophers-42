@@ -1,19 +1,34 @@
-#include <pthread.h>
 #include <stdio.h>
-
-void *test(void *add)
+// ./a.out 3 500 200 200 | ./a.out 3 500 200 200 5
+int pars(char **str)
 {
-    long *add_num = (long *) add;
-    printf("add: %ld\n",*add_num);
+    int i;
+    int j;
+
+    i = 1;
+    while(str[i])
+    {
+        j = 0;
+        while(str[i][j])
+        {
+            if(str[i][j] <= '0' || str[i][j] >= '9')
+            {
+                printf("invalide argument\n");
+                return(1);
+            }
+            j++;
+        }
+        i++;
+    }
+
 }
-
-int main()
+int main(int argc ,char *argv[])
 {
-    pthread_t t1;
-    pthread_t t2;
-    long value1 = 1;
-    pthread_create(&t1,NULL,test,(void *) &value1);
-    pthread_create(&t2,NULL,test,NULL);
-    pthread_join(t1,NULL);
-    pthread_join(t2,NULL);
+    if(argc != 5 && argc != 6)
+    {
+        printf("invalide argument\n");
+        return(0);
+    }
+    if (pars(argv) == 1)
+        return(0);
 }
