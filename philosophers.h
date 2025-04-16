@@ -2,17 +2,25 @@
 # define PHILOSOPHERS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 
-typedef struct s_time
+typedef struct s_info
 {
+    int number_philo;
     int time_to_die;
     int time_to_eat;
     int time_to_sleep;
-    int start_time;
+    long start_time;
+    int must_eat;
+    // int dead;
+    // pthread_mutex_t *forks;
+    // pthread_mutex_t print_lock;
+    // pthread_mutex_t meal_lock;
 
-} t_time
+} t_info
 ;
 typedef struct s_philo
 {
@@ -24,16 +32,8 @@ typedef struct s_philo
 } t_philo;
 
 
-typedef struct s_data
-{
-    int num_philos;
-    int number_meal;
-    int dead;
-    pthread_mutex_t *forks;
-    pthread_mutex_t print_lock;
-    pthread_mutex_t meal_lock;
-} t_data;
-
 int pars(char **str,int argc);
+void init(int num,char **str,t_info *info);
+int ft_atoi(char *str);
 
 #endif

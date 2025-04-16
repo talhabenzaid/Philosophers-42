@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:26 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/16 14:59:07 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:46:47 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int ft_atoi(char *str)
 
     i = 0;
     r = 1;
+    if(!str)
+        return(0);
     while(str[i])
     {
         r = r * 10 + str[i] - '0';

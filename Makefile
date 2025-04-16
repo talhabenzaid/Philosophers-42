@@ -1,6 +1,6 @@
 NAME		= philo
 
-SRCS		= philosophers.c parsing.c
+SRCS		= philosophers.c parsing.c init.c
 
 
 OBJS		= $(SRCS:%.c=%.o)
