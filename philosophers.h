@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/17 14:21:07 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:05:10 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <unistd.h>
 
+typedef struct s_philo t_philo; 
 
 typedef struct s_info
 {

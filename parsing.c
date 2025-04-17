@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:26 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/16 17:46:47 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:15:36 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int pars(char **str,int argc)
         }
         i++;
     }
-    if(str[1] && ft_atoi(str[1]) >= 200)
+    if(ft_atoi(str[1]) >= 200)
     {
         printf("number_of_philosophers must be less than 200\n");
         return(1);
