@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
+/*   Updated: 2025/04/17 14:21:07 by tbenzaid         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
@@ -15,25 +27,23 @@ typedef struct s_info
     int time_to_sleep;
     long start_time;
     int must_eat;
-    // int dead;
-    // pthread_mutex_t *forks;
-    // pthread_mutex_t print_lock;
-    // pthread_mutex_t meal_lock;
-
+    int dead;
+    pthread_mutex_t *forks;
+    t_philo *philos;
 } t_info
 ;
+
 typedef struct s_philo
 {
-    int id;
-    pthread_t thread;
-    int last_meal;
-    int meals_eaten;
-
+    int             id;
+    pthread_mutex_t *left_fork;
+    pthread_mutex_t *right_fork;
+    struct s_info   *info;
 } t_philo;
 
 
 int pars(char **str,int argc);
-void init(int num,char **str,t_info *info);
+void init(int num,char **str);
 int ft_atoi(char *str);
 
 #endif
