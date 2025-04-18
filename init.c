@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/18 16:13:45 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:29:08 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void *philosopher_routine(void *arg)
         pthread_mutex_lock(philo->left_fork);
         pthread_mutex_lock(philo->right_fork);
         print_state(philo, "taken a fork");
+        print_state(philo, "taken a fork");
+        
         print_state(philo, "is eating");
         usleep(philo->info->time_to_eat * 1000);
 
@@ -72,7 +74,7 @@ void *philosopher_routine(void *arg)
         
     }
 
-    return NULL;
+    return (NULL);
 }
 
 
