@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/17 19:36:55 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:13:45 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void init_info(int num,char **str,t_info *info)
     info->dead = 0;
     int i = 0;
     info->forks = malloc(sizeof(pthread_mutex_t) * info->number_philo);
-    if(!info->fork)
+    if(!info->forks)
         return;
     if (!info->forks)
         return;
@@ -38,23 +38,38 @@ void init_info(int num,char **str,t_info *info)
     }   
 }
 
+void print_state(t_philo *philo, const char *state)
+{
+    struct timeval tv;
+    long time ;
+    gettimeofday(&tv,NULL);
+    time = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000)) - philo->info->start_time;
+    // pthread_mutex_lock(philo->info->print_lock);
+    printf("%lu %d %s\n",time, philo->id, state);
+    // pthread_mutex_unlock(philo->info->print_lock);
+}
+
 void *philosopher_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
 
     while (1)
     {
-        printf("timestamp_in_ms %d is thinking\n", philo->id);
 
         pthread_mutex_lock(philo->left_fork);
         pthread_mutex_lock(philo->right_fork);
-
-        printf("timestamp_in_ms %d is eating\n", philo->id);
+        print_state(philo, "taken a fork");
+        print_state(philo, "is eating");
+        usleep(philo->info->time_to_eat * 1000);
 
         pthread_mutex_unlock(philo->right_fork);
         pthread_mutex_unlock(philo->left_fork);
 
-        printf("timestamp_in_ms %d is sleeping\n", philo->id);
+        print_state(philo, "is sleeping");
+        usleep(philo->info->time_to_sleep * 1000);
+
+        print_state(philo, "is thinking");
+        
     }
 
     return NULL;
