@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/18 14:38:39 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:20:49 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,8 @@ typedef struct s_philo
 int pars(char **str,int argc);
 void init(int num,char **str);
 int ft_atoi(char *str);
+void print_state(t_philo *philo, const char *state);
+void *philosopher_routine(void *arg);
+long get_current_time();
 
 #endif
