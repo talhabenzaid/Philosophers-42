@@ -6,18 +6,19 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/18 22:19:58 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/19 04:02:26 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-long get_current_time()
+long	get_current_time(void)
 {
-    struct timeval tv;
+	struct timeval	time;
 
-    gettimeofday(&tv,NULL);
-    return((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 void init_info(int num,char **str,t_info *info)
 {
@@ -34,22 +35,19 @@ void init_info(int num,char **str,t_info *info)
     info->forks = malloc(sizeof(pthread_mutex_t) * info->number_philo);
     if(!info->forks)
         return;
-    if (!info->forks)
-        return;
     while(i < info->number_philo)
     {
         pthread_mutex_init(&info->forks[i], NULL);
         i++;
-    }   
+    }
+    pthread_mutex_init(&info->dead_mutex, NULL);
 }
 
-void init(int num ,char **str)
+void init(int num ,char **str,t_info *info)
 {
     int i = 0;
     int j = 0;
-    t_info *info = malloc(sizeof(t_info));
-    if(!info)
-        return;
+
     init_info(num,str,info);
     t_philo *philo = malloc(sizeof(t_philo) * info->number_philo);
     if(!philo)

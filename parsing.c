@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:26 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/18 22:06:14 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/19 03:38:44 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int ft_atoi(char *str)
 
     if (!str)
         return (0);
-    
     while (str[i] >= '0' && str[i] <= '9')
     {
         result = result * 10 + (str[i] - '0');
@@ -44,6 +43,11 @@ int pars(char **str,int argc)
         j = 0;
         while(str[i][j])
         {
+            if (str[i][j] == '+' && str[i][j + 1] == '+')
+            {
+                printf("invalide argument\n");
+                return (1);
+            }
             if(str[i][j] != '+' && (str[i][j] < '0' || str[i][j] > '9'))
             {
                 printf("invalide argument\n");

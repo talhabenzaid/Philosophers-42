@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/18 22:20:49 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/19 04:00:52 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_info
     int must_eat;
     int dead;
     pthread_mutex_t *forks;
+    pthread_mutex_t dead_mutex;
     t_philo *philos;
 } t_info
 ;
@@ -40,15 +41,17 @@ typedef struct s_philo
     int             id;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
+    long    last_meal_time;
     struct s_info   *info;
 } t_philo;
 
 
 int pars(char **str,int argc);
-void init(int num,char **str);
+void init(int num ,char **str,t_info *info);
 int ft_atoi(char *str);
 void print_state(t_philo *philo, const char *state);
 void *philosopher_routine(void *arg);
 long get_current_time();
+void print_state(t_philo *philo, const char *state);
 
 #endif
