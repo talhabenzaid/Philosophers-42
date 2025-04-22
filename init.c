@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/19 04:02:26 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:19:33 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void init_info(int num,char **str,t_info *info)
         pthread_mutex_init(&info->forks[i], NULL);
         i++;
     }
-    pthread_mutex_init(&info->dead_mutex, NULL);
 }
 
 void init(int num ,char **str,t_info *info)
