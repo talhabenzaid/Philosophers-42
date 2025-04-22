@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/22 16:15:07 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:15:41 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct s_info
     int must_eat;
     int dead;
     pthread_mutex_t *forks;
+    pthread_mutex_t dead_lock;
+    pthread_mutex_t print_lock;
     t_philo *philos;
 } t_info
 ;

@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/22 16:19:33 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:15:23 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void init_info(int num,char **str,t_info *info)
         pthread_mutex_init(&info->forks[i], NULL);
         i++;
     }
+    pthread_mutex_init(&info->dead_lock, NULL);
+    pthread_mutex_init(&info->print_lock, NULL);
 }
 
 void init(int num ,char **str,t_info *info)
@@ -63,7 +65,6 @@ void init(int num ,char **str,t_info *info)
     pthread_t *threads = malloc(sizeof(pthread_t) * info->number_philo);
     if (!threads)
         return;
-
     while(j < info->number_philo)
     {
         pthread_create(&threads[j], NULL, philosopher_routine, &info->philos[j]);
