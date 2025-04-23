@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/22 21:55:18 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:12:21 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int print_state(t_philo *philo, const char *state)
 {
     long time;
-    // pthread_mutex_lock(&philo->info->print_lock);
+    pthread_mutex_lock(&philo->info->print_lock);
      pthread_mutex_lock(&philo->info->dead_lock);
     if (philo->info->dead == 1)
     {
@@ -25,8 +25,8 @@ int print_state(t_philo *philo, const char *state)
     pthread_mutex_unlock(&philo->info->dead_lock);
     time = get_current_time() - philo->info->start_time;
     printf("%lu %d %s\n", time, philo->id, state);
+    pthread_mutex_unlock(&philo->info->print_lock);
     return (1);
-    // pthread_mutex_unlock(&philo->info->print_lock);
 }
 
 int ft_check(t_philo *philo)
@@ -34,9 +34,9 @@ int ft_check(t_philo *philo)
     pthread_mutex_lock(&philo->info->dead_lock);
     long last_meal = get_current_time() - philo->last_meal_time;
     
-    // printf("hihi\n");
     if (last_meal >= philo->info->time_to_die)
     {
+        printf("gg\n");
         pthread_mutex_unlock(&philo->info->dead_lock);
         return (0);
     }
@@ -81,29 +81,32 @@ void *philosopher_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
     philo->last_meal_time = get_current_time();
-
+    if(philo->id % 2 == 0)
+        usleep(500);
     while (1)
     {
-        // pthread_mutex_lock(&philo->info->dead_lock);
-        // if (philo->info->dead == 1)
-        // {
-        //     pthread_mutex_unlock(&philo->info->dead_lock);
-        //     break;
-        // }
-        // pthread_mutex_unlock(&philo->info->dead_lock);
-        
+        pthread_mutex_lock(&philo->info->dead_lock);
+        if (philo->info->dead == 1)
+        {
+            pthread_mutex_unlock(&philo->info->dead_lock);
+            return (NULL);
+        }
+        pthread_mutex_unlock(&philo->info->dead_lock);
+
         pthread_mutex_lock(philo->left_fork);
         if (!print_state(philo, "has taken a fork"))
         {
             pthread_mutex_unlock(philo->left_fork);
             return (NULL);
         }
-        if(philo->info->number_philo == 1)
+
+        if (philo->info->number_philo == 1)
         {
             usleep(philo->info->time_to_die * 1000);
             print_state(philo, "died");
-            return(NULL);
+            return (NULL);
         }
+
         pthread_mutex_lock(philo->right_fork);
         if (!print_state(philo, "has taken a fork"))
         {
@@ -130,3 +133,4 @@ void *philosopher_routine(void *arg)
 
     return (NULL);
 }
+
