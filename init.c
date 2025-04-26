@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/26 09:48:37 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:16:38 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void init_info(int num,char **str,t_info *info)
     info->time_to_eat = ft_atoi(str[3]);
     info->time_to_sleep = ft_atoi(str[4]);
     info->must_eat = -1;
+    info->all_eaten = 0;
     if(num == 6)
         info->must_eat = ft_atoi(str[5]);
     info->dead = 0;
@@ -60,6 +61,7 @@ void init(int num ,char **str,t_info *info)
         info->philos[i].info = info;
         info->philos[i].left_fork = &info->forks[i];
         info->philos[i].right_fork = &info->forks[(i + 1) % info->number_philo];
+        info->philos[i].meals_eaten = 0;
         i++;
     }
     pthread_t *threads = malloc(sizeof(pthread_t) * info->number_philo);

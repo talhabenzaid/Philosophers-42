@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:26 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/26 09:56:30 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:17:20 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ int pars(char **str, int argc)
         printf("invalide argument\n");
         return (0);
     }
-    if(ft_atoi(str[6]) == 0)
-        return(0);
     i = 1;
     while (str[i])
     {

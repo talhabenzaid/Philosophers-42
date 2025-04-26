@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/26 09:51:22 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:16:16 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_info
     long start_time;
     int must_eat;
     int dead;
+    int all_eaten;
     pthread_mutex_t *forks;
     pthread_mutex_t dead_lock;
     pthread_mutex_t print_lock;
@@ -44,6 +45,7 @@ typedef struct s_philo
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
     long    last_meal_time;
+    int meals_eaten;
     struct s_info   *info;
 } t_philo;
 
