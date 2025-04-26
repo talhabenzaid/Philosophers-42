@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/23 15:12:21 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:19:42 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int print_state(t_philo *philo, const char *state)
     if (philo->info->dead == 1)
     {
         pthread_mutex_unlock(&philo->info->dead_lock);
+        pthread_mutex_unlock(&philo->info->print_lock);
         return (0);
     }
     pthread_mutex_unlock(&philo->info->dead_lock);
@@ -36,7 +37,7 @@ int ft_check(t_philo *philo)
     
     if (last_meal >= philo->info->time_to_die)
     {
-        printf("gg\n");
+        philo->info->dead = 1; 
         pthread_mutex_unlock(&philo->info->dead_lock);
         return (0);
     }
@@ -47,32 +48,25 @@ int ft_check(t_philo *philo)
 int check_death(t_philo *philo)
 {
     int i;
-    int n;
     int nump;
     
     i = 0;
     nump = philo->info->number_philo;
-    while(i)
+    while(1)
     {
-        usleep(500);
-        pthread_mutex_lock(&philo->info->dead_lock);
-        if(!ft_check(&philo[i]))
+        usleep(1000);
+        i = 0;
+        while (i < nump)
         {
-            n = i;
-            i = 0;
-            while (i < nump)
+            if(!ft_check(&philo[i]))
             {
-                philo[i].info->dead = 1;
-                i++;
+                pthread_mutex_lock(&philo->info->print_lock);
+                printf("%lu %d died\n", get_current_time() - philo->info->start_time, philo[i].id);
+                pthread_mutex_unlock(&philo->info->print_lock);
+                return (0);
             }
-            pthread_mutex_unlock(&philo->info->dead_lock);
-            printf("%d died\n", n + 1);
-            return (0);
+            i++;
         }
-        pthread_mutex_unlock(&philo->info->dead_lock);
-        i++;
-        if (i == nump)
-            i = 0;
     }
     return(1);
 }
