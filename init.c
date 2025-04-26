@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/23 15:11:11 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:48:37 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ void init(int num ,char **str,t_info *info)
         j++;
     }
     j = 0;
-    check_death(info->philos);
+    if(philo->info->number_philo != 1)
+        check_death(info->philos);
     while(j < info->number_philo)
     {
         pthread_join(threads[j], NULL);
