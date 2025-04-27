@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/26 20:15:36 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/27 10:28:26 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void *philosopher_routine(void *arg)
         if (philo->info->dead == 1 || philo->info->all_eaten == 1)
         {
             pthread_mutex_unlock(&philo->info->dead_lock);
-            return (NULL);
+            break;
         }
         pthread_mutex_unlock(&philo->info->dead_lock);
 
@@ -130,6 +130,7 @@ void *philosopher_routine(void *arg)
 
         if (philo->info->number_philo == 1)
         {
+            pthread_mutex_unlock(philo->left_fork);
             usleep(philo->info->time_to_die * 1000);
             print_state(philo, "died");
             return (NULL);
@@ -144,18 +145,23 @@ void *philosopher_routine(void *arg)
         }
 
         if (!print_state(philo, "is eating"))
+        {
+            pthread_mutex_unlock(philo->left_fork);
+            pthread_mutex_unlock(philo->right_fork);
             return (NULL);
-            
-        philo->last_meal_time = get_current_time();
-        usleep(philo->info->time_to_eat * 1000);
-        
+        }   
         pthread_mutex_lock(&philo->info->dead_lock);
         philo->meals_eaten++;
         pthread_mutex_unlock(&philo->info->dead_lock);
+        
+        philo->last_meal_time = get_current_time();
+        usleep(philo->info->time_to_eat * 1000);
+        
 
         pthread_mutex_unlock(philo->right_fork);
         pthread_mutex_unlock(philo->left_fork);
-
+        
+        
         if (!print_state(philo, "is sleeping"))
             return (NULL);
         usleep(philo->info->time_to_sleep * 1000);
