@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/29 11:44:11 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:50:41 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void *philosopher_routine(void *arg)
     t_philo *philo = (t_philo *)arg;
     philo->last_meal_time = get_current_time();
     if(philo->id % 2 == 0)
-        ft_usleep(300,philo);
+        ft_usleep(philo->info->time_to_eat / 2 ,philo);
     while (1)
     {
         pthread_mutex_lock(&philo->info->dead_lock);
