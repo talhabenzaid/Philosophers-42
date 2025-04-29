@@ -6,11 +6,29 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/27 10:28:26 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:10:01 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int    ft_usleep(long period, t_philo *philo)
+{
+    long    start;
+    int        dead;
+
+    start = get_current_time();
+    while (get_current_time() - start < period)
+    {
+        pthread_mutex_lock(&philo->info->dead_lock);
+        dead = philo->info->dead;
+        pthread_mutex_unlock(&philo->info->dead_lock);
+        if (dead)
+            break ;
+        usleep(100);
+    }
+    return (0);
+}
 
 int print_state(t_philo *philo, const char *state)
 {
@@ -80,7 +98,7 @@ int check_death(t_philo *philo)
     nump = philo->info->number_philo;
     while(1)
     {
-        usleep(1000);
+        ft_usleep(1000,philo);
         i = 0;
         while (i < nump)
         {
@@ -110,7 +128,7 @@ void *philosopher_routine(void *arg)
     t_philo *philo = (t_philo *)arg;
     philo->last_meal_time = get_current_time();
     if(philo->id % 2 == 0)
-        usleep(500);
+        ft_usleep(500,philo);
     while (1)
     {
         pthread_mutex_lock(&philo->info->dead_lock);
@@ -131,7 +149,7 @@ void *philosopher_routine(void *arg)
         if (philo->info->number_philo == 1)
         {
             pthread_mutex_unlock(philo->left_fork);
-            usleep(philo->info->time_to_die * 1000);
+            ft_usleep(philo->info->time_to_die,philo);
             print_state(philo, "died");
             return (NULL);
         }
@@ -155,7 +173,7 @@ void *philosopher_routine(void *arg)
         pthread_mutex_unlock(&philo->info->dead_lock);
         
         philo->last_meal_time = get_current_time();
-        usleep(philo->info->time_to_eat * 1000);
+        ft_usleep(philo->info->time_to_eat,philo);
         
 
         pthread_mutex_unlock(philo->right_fork);
@@ -164,7 +182,7 @@ void *philosopher_routine(void *arg)
         
         if (!print_state(philo, "is sleeping"))
             return (NULL);
-        usleep(philo->info->time_to_sleep * 1000);
+        ft_usleep(philo->info->time_to_sleep,philo);
 
         if (!print_state(philo, "is thinking"))
             return (NULL);
