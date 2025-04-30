@@ -1,11 +1,11 @@
 NAME		= philo
 
-SRCS		= philosophers.c parsing.c init.c routine.c
+SRCS		= philosophers.c parsing.c init.c routine.c check.c
 
 
 OBJS		= $(SRCS:%.c=%.o)
 
-FLAGS		= -Wall -Werror -Wextra -fsanitize=thread -g
+FLAGS		= -Wall -Werror -Wextra
 
 all: $(NAME)
 

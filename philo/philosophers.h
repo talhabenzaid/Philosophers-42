@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/30 08:14:05 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/04/30 08:36:33 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ typedef struct s_philo
 } t_philo;
 
 int check_death(t_philo *philo);
+void check_meals(t_philo *philo);
+int    ft_usleep(long period, t_philo *philo);
+int ft_check(t_philo *philo);
 int pars(char **str,int argc);
 void init(int num ,char **str,t_info *info);
 int ft_atoi(char *str);
