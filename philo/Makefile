@@ -5,7 +5,7 @@ SRCS		= philosophers.c parsing.c init.c routine.c check.c
 
 OBJS		= $(SRCS:%.c=%.o)
 
-FLAGS		= -Wall -Werror -Wextra
+FLAGS		= -Wall -Werror -Wextra -fsanitize=thread
 
 all: $(NAME)
 
