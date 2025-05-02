@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/02 17:53:04 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:45:03 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,22 @@ void *one_philo(t_philo *philo)
 }
 void *philosopher_actions(t_philo *philo)
 {
-	pthread_mutex_lock(philo->right_fork);
-	if (!print_state(philo, "has taken a fork"))
-		return (pthread_mutex_unlock(philo->right_fork), NULL);
-	if(!one_philo(philo))
-		return(NULL);
 	pthread_mutex_lock(philo->left_fork);
 	if (!print_state(philo, "has taken a fork"))
+		return (pthread_mutex_unlock(philo->left_fork), NULL);
+	if(!one_philo(philo))
+		return(NULL);
+	pthread_mutex_lock(philo->right_fork);
+	if (!print_state(philo, "has taken a fork"))
 	{
-		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return (NULL);
 	}
 	if (!print_state(philo, "is eating"))
 	{
-		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return (NULL);
 	}
 	pthread_mutex_lock(&philo->info->dead_lock);

@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:26 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/30 08:49:53 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:52:36 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int is_valid_number_format(char *str)
     
     while (str[j])
     {
-        if (str[j] == '+' && str[j + 1] == '+')
+        if ((str[j] == '+' && str[j + 1] == '+') || (str[j]=='+' && str[j - 1]))
         {
             printf("invalide argument\n");
             return (0);
