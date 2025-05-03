@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:28 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/04/30 08:50:11 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/03 02:22:48 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int print_state(t_philo *philo, const char *state)
     long time;
     pthread_mutex_lock(&philo->info->print_lock);
     pthread_mutex_lock(&philo->info->dead_lock);
-    if (philo->info->dead == 1 || philo->info->all_eaten == 1)
+    if (philo->info->dead == 1|| philo->info->all_eaten == 1)
     {
         pthread_mutex_unlock(&philo->info->dead_lock);
         pthread_mutex_unlock(&philo->info->print_lock);

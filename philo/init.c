@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/02 18:53:07 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/03 02:30:52 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,16 @@ void init(int num ,char **str,t_info *info)
     {
         info->philos[i].id = i + 1;
         info->philos[i].info = info;
-        info->philos[i].left_fork = &info->forks[i];
-        info->philos[i].right_fork = &info->forks[(i + 1) % info->number_philo];
+        if(i % 2 == 0)
+        {
+            info->philos[i].left_fork = &info->forks[(i + 1) % info->number_philo];
+            info->philos[i].right_fork = &info->forks[i];
+        }
+        else 
+        {
+            info->philos[i].left_fork = &info->forks[i];
+            info->philos[i].right_fork = &info->forks[(i + 1) % info->number_philo];
+        }
         info->philos[i].meals_eaten = 0;
         i++;
     }
