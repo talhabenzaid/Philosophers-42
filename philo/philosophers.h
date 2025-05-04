@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/03 02:40:02 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/04 09:23:58 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ int		ft_atoi(char *str);
 void	*philosopher_routine(void *arg);
 long	get_current_time(void);
 int		print_state(t_philo *philo, const char *state);
+void	cleanup_resources(t_info *info, pthread_t *threads);
 
 #endif
