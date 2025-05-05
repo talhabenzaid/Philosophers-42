@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/04 09:23:41 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:52:15 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,11 @@ void	init_info(int num, char **str, t_info *info)
 	pthread_mutex_init(&info->print_lock, NULL);
 }
 
-void	init_philosophers(t_info *info)
+void	init_philosophers(t_info *info,t_philo *philo)
 {
 	int		i;
-	t_philo	*philo;
 
 	i = 0;
-	philo = malloc(sizeof(t_philo) * info->number_philo);
-	if (!philo)
-		return ;
 	info->philos = philo;
 	while (i < info->number_philo)
 	{
@@ -79,30 +75,30 @@ void	init_philosophers(t_info *info)
 	}
 }
 
-void	init(int num, char **str, t_info *info)
+void init_pthread(t_info *info,pthread_t	*threads)
 {
 	int			j;
-	pthread_t	*threads;
-
 	j = 0;
-	init_info(num, str, info);
-	init_philosophers(info);
-	threads = malloc(sizeof(pthread_t) * info->number_philo);
-	if (!threads)
-	{
-		cleanup_resources(info, NULL);
-		return ;
-	}
+
 	while (j < info->number_philo)
 	{
-		pthread_create(&threads[j], NULL,
-			philosopher_routine, &info->philos[j]);
+		if(pthread_create(&threads[j], NULL,philosopher_routine, &info->philos[j]) == -1)
+		{
+			cleanup_resources(info, NULL);
+			return;
+		}
 		j++;
 	}
 	j = 0;
 	if (info->philos->info->number_philo != 1)
 		check_death(info->philos);
 	while (j < info->number_philo)
-		(pthread_join(threads[j], NULL), j++);
-	cleanup_resources(info, threads);
+	{
+		if(pthread_join(threads[j], NULL) == -1)
+		{
+			cleanup_resources(info, NULL);
+			return;
+		}
+		j++;
+	}
 }

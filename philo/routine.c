@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/04 09:26:31 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:02:36 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,8 @@ void	*philosopher_actions(t_philo *philo)
 		return (NULL);
 	}
 	if (!eat_phase(philo))
-	{
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
-		return (NULL);
-	}
+		return(pthread_mutex_unlock(philo->right_fork),
+			pthread_mutex_unlock(philo->left_fork),NULL);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 	if (!print_state(philo, "is sleeping"))
