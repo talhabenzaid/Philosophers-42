@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 16:52:15 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:28:23 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,18 @@ void	init_info(int num, char **str, t_info *info)
 	}
 	pthread_mutex_init(&info->dead_lock, NULL);
 	pthread_mutex_init(&info->print_lock, NULL);
+	pthread_mutex_init(&info->meal_lock, NULL);
 }
 
-void	init_philosophers(t_info *info,t_philo *philo)
+void	init_philosophers(t_info *info)
 {
 	int		i;
+	t_philo	*philo;
 
 	i = 0;
+	philo = malloc(sizeof(t_philo) * info->number_philo);
+	if (!philo)
+		return ;
 	info->philos = philo;
 	while (i < info->number_philo)
 	{
@@ -75,30 +80,30 @@ void	init_philosophers(t_info *info,t_philo *philo)
 	}
 }
 
-void init_pthread(t_info *info,pthread_t	*threads)
+void	init(int num, char **str, t_info *info)
 {
 	int			j;
-	j = 0;
+	pthread_t	*threads;
 
+	j = 0;
+	init_info(num, str, info);
+	init_philosophers(info);
+	threads = malloc(sizeof(pthread_t) * info->number_philo);
+	if (!threads)
+	{
+		cleanup_resources(info, NULL);
+		return ;
+	}
 	while (j < info->number_philo)
 	{
-		if(pthread_create(&threads[j], NULL,philosopher_routine, &info->philos[j]) == -1)
-		{
-			cleanup_resources(info, NULL);
-			return;
-		}
+		pthread_create(&threads[j], NULL,
+			philosopher_routine, &info->philos[j]);
 		j++;
 	}
 	j = 0;
 	if (info->philos->info->number_philo != 1)
 		check_death(info->philos);
 	while (j < info->number_philo)
-	{
-		if(pthread_join(threads[j], NULL) == -1)
-		{
-			cleanup_resources(info, NULL);
-			return;
-		}
-		j++;
-	}
+		(pthread_join(threads[j], NULL), j++);
+	cleanup_resources(info, threads);
 }

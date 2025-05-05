@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:28 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 17:08:31 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:11:09 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,28 +66,32 @@ int	ft_check(t_philo *philo)
 	return (1);
 }
 
-void	check_meals(t_philo *philo)
+void check_meals(t_philo *philo)
 {
-	int	i;
-	int	all_eaten;
+    int i;
+    int all_eaten;
 
-	if (philo->info->must_eat == -1)
-		return ;
-	i = 0;
-	all_eaten = 1;
-	pthread_mutex_lock(&philo->info->dead_lock);
-	while (i < philo->info->number_philo)
-	{
-		if (philo[i].meals_eaten < philo->info->must_eat)
-		{
-			all_eaten = 0;
-			break ;
-		}
-		i++;
-	}
-	if (all_eaten)
-		philo->info->all_eaten = 1;
-	pthread_mutex_unlock(&philo->info->dead_lock);
+    if (philo->info->must_eat == -1)
+        return;
+    i = 0;
+    all_eaten = 1;
+    pthread_mutex_lock(&philo->info->meal_lock);
+    while (i < philo->info->number_philo)
+    {
+        if (philo[i].meals_eaten < philo->info->must_eat)
+        {
+            all_eaten = 0;
+            break;
+        }
+        i++;
+    }
+    if (all_eaten)
+    {
+        pthread_mutex_lock(&philo->info->dead_lock);
+        philo->info->all_eaten = 1;
+        pthread_mutex_unlock(&philo->info->dead_lock);
+    }
+    pthread_mutex_unlock(&philo->info->meal_lock);
 }
 
 int	check_death(t_philo *philo)
