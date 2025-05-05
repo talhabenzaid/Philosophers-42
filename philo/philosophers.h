@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 19:25:11 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:57:19 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	*philosopher_routine(void *arg);
 long	get_current_time(void);
 int		print_state(t_philo *philo, const char *state);
 void	cleanup_resources(t_info *info, pthread_t *threads);
-void	init(int num, char **str, t_info *info);
+void	init_info(int num, char **str, t_info *info);
+void	init_philosophers(t_info *info);
 
 #endif

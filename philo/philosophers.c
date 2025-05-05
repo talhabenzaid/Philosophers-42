@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:33 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 19:25:07 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:56:24 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,34 @@ void	cleanup_resources(t_info *info, pthread_t *threads)
 	if (info->philos)
 		free(info->philos);
 	free(info);
+}
+
+void	init(int num, char **str, t_info *info)
+{
+	int			j;
+	pthread_t	*threads;
+
+	j = 0;
+	init_info(num, str, info);
+	init_philosophers(info);
+	threads = malloc(sizeof(pthread_t) * info->number_philo);
+	if (!threads)
+	{
+		cleanup_resources(info, NULL);
+		return ;
+	}
+	while (j < info->number_philo)
+	{
+		pthread_create(&threads[j], NULL,
+			philosopher_routine, &info->philos[j]);
+		j++;
+	}
+	j = 0;
+	if (info->philos->info->number_philo != 1)
+		check_death(info->philos);
+	while (j < info->number_philo)
+		(pthread_join(threads[j], NULL), j++);
+	cleanup_resources(info, threads);
 }
 
 int	main(int argc, char *argv[])

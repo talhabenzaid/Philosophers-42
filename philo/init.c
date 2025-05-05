@@ -6,11 +6,29 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 19:28:23 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:56:46 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int	ft_usleep(long period, t_philo *philo)
+{
+	long	start;
+	int		dead;
+
+	start = get_current_time();
+	while (get_current_time() - start < period)
+	{
+		pthread_mutex_lock(&philo->info->dead_lock);
+		dead = philo->info->dead;
+		pthread_mutex_unlock(&philo->info->dead_lock);
+		if (dead)
+			break ;
+		usleep(100);
+	}
+	return (0);
+}
 
 long	get_current_time(void)
 {
@@ -49,16 +67,24 @@ void	init_info(int num, char **str, t_info *info)
 	pthread_mutex_init(&info->meal_lock, NULL);
 }
 
-void	init_philosophers(t_info *info)
+void	allocate_philosophers(t_info *info)
 {
-	int		i;
 	t_philo	*philo;
 
-	i = 0;
 	philo = malloc(sizeof(t_philo) * info->number_philo);
 	if (!philo)
 		return ;
 	info->philos = philo;
+}
+
+void	init_philosophers(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	allocate_philosophers(info);
+	if (!info->philos)
+		return ;
 	while (i < info->number_philo)
 	{
 		info->philos[i].id = i + 1;
@@ -78,32 +104,4 @@ void	init_philosophers(t_info *info)
 		info->philos[i].meals_eaten = 0;
 		i++;
 	}
-}
-
-void	init(int num, char **str, t_info *info)
-{
-	int			j;
-	pthread_t	*threads;
-
-	j = 0;
-	init_info(num, str, info);
-	init_philosophers(info);
-	threads = malloc(sizeof(pthread_t) * info->number_philo);
-	if (!threads)
-	{
-		cleanup_resources(info, NULL);
-		return ;
-	}
-	while (j < info->number_philo)
-	{
-		pthread_create(&threads[j], NULL,
-			philosopher_routine, &info->philos[j]);
-		j++;
-	}
-	j = 0;
-	if (info->philos->info->number_philo != 1)
-		check_death(info->philos);
-	while (j < info->number_philo)
-		(pthread_join(threads[j], NULL), j++);
-	cleanup_resources(info, threads);
 }
