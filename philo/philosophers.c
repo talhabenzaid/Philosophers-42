@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:33 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 19:56:24 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/06 07:49:23 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	cleanup_resources(t_info *info, pthread_t *threads)
 	}
 	pthread_mutex_destroy(&info->dead_lock);
 	pthread_mutex_destroy(&info->print_lock);
+	pthread_mutex_destroy(&info->meal_lock);
 	if (info->philos)
 		free(info->philos);
 	free(info);
