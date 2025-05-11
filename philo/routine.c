@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 19:54:04 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:03:55 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	*philosopher_actions(t_philo *philo)
 	ft_usleep(philo->info->time_to_sleep, philo);
 	if (!print_state(philo, "is thinking"))
 		return (NULL);
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 == 1)
 		ft_usleep(2, philo);
 	return ((void *)1);
 }
