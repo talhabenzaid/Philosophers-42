@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:59:32 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/05 19:57:19 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:25:41 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,6 @@ int		print_state(t_philo *philo, const char *state);
 void	cleanup_resources(t_info *info, pthread_t *threads);
 void	init_info(int num, char **str, t_info *info);
 void	init_philosophers(t_info *info);
+int	init_mutexes(t_info *info);
 
 #endif

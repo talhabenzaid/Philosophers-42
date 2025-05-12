@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/06 13:41:03 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:25:49 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ long	get_current_time(void)
 
 void	init_info(int num, char **str, t_info *info)
 {
-	int	i;
-
 	info->start_time = get_current_time();
 	info->number_philo = ft_atoi(str[1]);
 	info->time_to_die = ft_atoi(str[2]);
@@ -52,18 +50,11 @@ void	init_info(int num, char **str, t_info *info)
 	if (num == 6)
 		info->must_eat = ft_atoi(str[5]);
 	info->dead = 0;
-	i = 0;
-	info->forks = malloc(sizeof(pthread_mutex_t) * info->number_philo);
-	if (!info->forks)
-		return ;
-	while (i < info->number_philo)
+	if (!init_mutexes(info))
 	{
-		pthread_mutex_init(&info->forks[i], NULL);
-		i++;
+		free(info);
+		return ;
 	}
-	pthread_mutex_init(&info->dead_lock, NULL);
-	pthread_mutex_init(&info->print_lock, NULL);
-	pthread_mutex_init(&info->meal_lock, NULL);
 }
 
 void	allocate_philosophers(t_info *info)

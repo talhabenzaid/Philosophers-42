@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:33 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/06 07:49:23 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:56:40 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,56 @@ void	cleanup_resources(t_info *info, pthread_t *threads)
 		free(info->philos);
 	free(info);
 }
+int	init_fork_mutexes(t_info *info)
+{
+	int	i;
+
+	info->forks = malloc(sizeof(pthread_mutex_t) * info->number_philo);
+	if (!info->forks)
+		return (0);
+	i = 0;
+	while (i < info->number_philo)
+	{
+		if (pthread_mutex_init(&info->forks[i], NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&info->forks[i]);
+			free(info->forks);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	init_mutexes(t_info *info)
+{
+	int dead_lock_init;
+	int print_lock_init;
+	int meal_lock_init;
+	int i;
+
+	if (!init_fork_mutexes(info))
+		return (0);
+	dead_lock_init = pthread_mutex_init(&info->dead_lock, NULL);
+	print_lock_init = pthread_mutex_init(&info->print_lock, NULL);
+	meal_lock_init = pthread_mutex_init(&info->meal_lock, NULL);
+	if (dead_lock_init != 0 || print_lock_init != 0 || meal_lock_init != 0)
+	{
+		i = info->number_philo;
+		while (--i >= 0)
+			pthread_mutex_destroy(&info->forks[i]);
+		free(info->forks);
+		if (dead_lock_init == 0)
+			pthread_mutex_destroy(&info->dead_lock);
+		if (print_lock_init == 0)
+			pthread_mutex_destroy(&info->print_lock);
+		if (meal_lock_init == 0)
+			pthread_mutex_destroy(&info->meal_lock);
+		return (0);
+	}
+	return (1);
+}
 
 void	init(int num, char **str, t_info *info)
 {
@@ -52,8 +102,9 @@ void	init(int num, char **str, t_info *info)
 	}
 	while (j < info->number_philo)
 	{
-		pthread_create(&threads[j], NULL,
-			philosopher_routine, &info->philos[j]);
+		if(pthread_create(&threads[j], NULL,
+			philosopher_routine, &info->philos[j]) != 0)
+			cleanup_resources(info, threads);
 		j++;
 	}
 	j = 0;
