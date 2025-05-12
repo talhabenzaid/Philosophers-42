@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:28 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/11 19:45:43 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:14:30 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	check_death(t_philo *philo)
 {
 	while (1)
 	{
-		ft_usleep(1,philo);
+		ft_usleep(2,philo);
 		if (!check_philosopher_deaths(philo))
 			return (0);
 		check_meals(philo);
