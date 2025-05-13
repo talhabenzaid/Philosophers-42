@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:33 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/12 14:56:40 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:46:24 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	cleanup_resources(t_info *info, pthread_t *threads)
 		free(info->philos);
 	free(info);
 }
+
 int	init_fork_mutexes(t_info *info)
 {
 	int	i;
@@ -59,10 +60,10 @@ int	init_fork_mutexes(t_info *info)
 
 int	init_mutexes(t_info *info)
 {
-	int dead_lock_init;
-	int print_lock_init;
-	int meal_lock_init;
-	int i;
+	int	dead_lock_init;
+	int	print_lock_init;
+	int	meal_lock_init;
+	int	i;
 
 	if (!init_fork_mutexes(info))
 		return (0);
@@ -86,14 +87,12 @@ int	init_mutexes(t_info *info)
 	return (1);
 }
 
-void	init(int num, char **str, t_info *info)
+void	init(t_info *info)
 {
 	int			j;
 	pthread_t	*threads;
 
 	j = 0;
-	init_info(num, str, info);
-	init_philosophers(info);
 	threads = malloc(sizeof(pthread_t) * info->number_philo);
 	if (!threads)
 	{
@@ -102,16 +101,18 @@ void	init(int num, char **str, t_info *info)
 	}
 	while (j < info->number_philo)
 	{
-		if(pthread_create(&threads[j], NULL,
-			philosopher_routine, &info->philos[j]) != 0)
+		if (pthread_create(&threads[j], NULL,
+				philosopher_routine, &info->philos[j]) != 0)
 			cleanup_resources(info, threads);
 		j++;
 	}
 	j = 0;
-	if (info->philos->info->number_philo != 1)
-		check_death(info->philos);
+	(usleep(100), check_death(info->philos));
 	while (j < info->number_philo)
-		(pthread_join(threads[j], NULL), j++);
+	{
+		pthread_join(threads[j], NULL);
+		j++;
+	}
 	cleanup_resources(info, threads);
 }
 
@@ -124,6 +125,8 @@ int	main(int argc, char *argv[])
 	info = malloc(sizeof(t_info));
 	if (!info)
 		return (0);
-	init(argc, argv, info);
+	(init_info(argc, argv, info), init_philosophers(info));
+	info->start_time = get_current_time();
+	init(info);
 	return (0);
 }

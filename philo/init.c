@@ -6,29 +6,11 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/12 14:25:49 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:37:10 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-int	ft_usleep(long period, t_philo *philo)
-{
-	long	start;
-	int		dead;
-
-	start = get_current_time();
-	while (get_current_time() - start < period)
-	{
-		pthread_mutex_lock(&philo->info->dead_lock);
-		dead = philo->info->dead;
-		pthread_mutex_unlock(&philo->info->dead_lock);
-		if (dead)
-			break ;
-		usleep(100);
-	}
-	return (0);
-}
 
 long	get_current_time(void)
 {
@@ -67,6 +49,20 @@ void	allocate_philosophers(t_info *info)
 	info->philos = philo;
 }
 
+void	assign_forks(t_philo *philo, t_info *info, int i)
+{
+	if (i % 2 == 0)
+	{
+		philo->left_fork = &info->forks[(i + 1) % info->number_philo];
+		philo->right_fork = &info->forks[i];
+	}
+	else
+	{
+		philo->left_fork = &info->forks[i];
+		philo->right_fork = &info->forks[(i + 1) % info->number_philo];
+	}
+}
+
 void	init_philosophers(t_info *info)
 {
 	int	i;
@@ -79,19 +75,9 @@ void	init_philosophers(t_info *info)
 	{
 		info->philos[i].id = i + 1;
 		info->philos[i].info = info;
-		if (i % 2 == 0)
-		{
-			info->philos[i].left_fork
-				= &info->forks[(i + 1) % info->number_philo];
-			info->philos[i].right_fork = &info->forks[i];
-		}
-		else
-		{
-			info->philos[i].left_fork = &info->forks[i];
-			info->philos[i].right_fork
-				= &info->forks[(i + 1) % info->number_philo];
-		}
+		info->philos[i].last_meal_time = info->start_time;
 		info->philos[i].meals_eaten = 0;
+		assign_forks(&info->philos[i], info, i);
 		i++;
 	}
 }

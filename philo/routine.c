@@ -6,17 +6,28 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/12 14:12:34 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/13 20:32:56 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	initialize_philosopher(t_philo *philo)
+int	ft_usleep(long period, t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->print_lock);
-	philo->last_meal_time = get_current_time();
-	pthread_mutex_unlock(&philo->info->print_lock);
+	long	start;
+	int		dead;
+
+	start = get_current_time();
+	while (get_current_time() - start < period)
+	{
+		pthread_mutex_lock(&philo->info->dead_lock);
+		dead = philo->info->dead;
+		pthread_mutex_unlock(&philo->info->dead_lock);
+		if (dead)
+			break ;
+		usleep(100);
+	}
+	return (0);
 }
 
 void	*one_philo(t_philo *philo)
@@ -79,7 +90,8 @@ void	*philosopher_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	initialize_philosopher(philo);
+	if (philo->id % 2 == 0)
+		usleep(500);
 	while (1)
 	{
 		pthread_mutex_lock(&philo->info->dead_lock);
