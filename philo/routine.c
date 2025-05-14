@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 22:19:20 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/13 20:32:56 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/14 08:48:57 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ void	*one_philo(t_philo *philo)
 	return ((void *)1);
 }
 
-static int	eat_phase(t_philo *philo)
+int	eat_phase(t_philo *philo)
 {
 	if (!print_state(philo, "is eating"))
 		return (0);
-	pthread_mutex_lock(&philo->info->meal_lock);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->info->meal_lock);
 	pthread_mutex_lock(&philo->info->print_lock);
 	philo->last_meal_time = get_current_time();
 	pthread_mutex_unlock(&philo->info->print_lock);
 	ft_usleep(philo->info->time_to_eat, philo);
+	pthread_mutex_lock(&philo->info->meal_lock);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->info->meal_lock);
 	return (1);
 }
 

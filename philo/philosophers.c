@@ -6,13 +6,13 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:54:33 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/13 20:46:24 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/14 08:06:43 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	cleanup_resources(t_info *info, pthread_t *threads)
+void	cleanup(t_info *info, pthread_t *threads)
 {
 	int	i;
 
@@ -96,14 +96,14 @@ void	init(t_info *info)
 	threads = malloc(sizeof(pthread_t) * info->number_philo);
 	if (!threads)
 	{
-		cleanup_resources(info, NULL);
+		cleanup(info, NULL);
 		return ;
 	}
 	while (j < info->number_philo)
 	{
 		if (pthread_create(&threads[j], NULL,
 				philosopher_routine, &info->philos[j]) != 0)
-			cleanup_resources(info, threads);
+			cleanup(info, threads);
 		j++;
 	}
 	j = 0;
@@ -113,7 +113,7 @@ void	init(t_info *info)
 		pthread_join(threads[j], NULL);
 		j++;
 	}
-	cleanup_resources(info, threads);
+	cleanup(info, threads);
 }
 
 int	main(int argc, char *argv[])
@@ -125,8 +125,16 @@ int	main(int argc, char *argv[])
 	info = malloc(sizeof(t_info));
 	if (!info)
 		return (0);
-	(init_info(argc, argv, info), init_philosophers(info));
-	info->start_time = get_current_time();
+	if (!init_info(argc, argv, info))
+	{
+		free(info);
+		return (0);
+	}
+	if (!init_philosophers(info))
+	{
+		cleanup(info, NULL);
+		return (0);
+	}
 	init(info);
 	return (0);
 }

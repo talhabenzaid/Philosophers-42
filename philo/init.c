@@ -6,7 +6,7 @@
 /*   By: tbenzaid <tbenzaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:06:48 by tbenzaid          #+#    #+#             */
-/*   Updated: 2025/05/13 20:37:10 by tbenzaid         ###   ########.fr       */
+/*   Updated: 2025/05/14 09:07:06 by tbenzaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ long	get_current_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	init_info(int num, char **str, t_info *info)
+int	init_info(int num, char **str, t_info *info)
 {
 	info->start_time = get_current_time();
 	info->number_philo = ft_atoi(str[1]);
@@ -33,10 +33,8 @@ void	init_info(int num, char **str, t_info *info)
 		info->must_eat = ft_atoi(str[5]);
 	info->dead = 0;
 	if (!init_mutexes(info))
-	{
-		free(info);
-		return ;
-	}
+		return (0);
+	return (1);
 }
 
 void	allocate_philosophers(t_info *info)
@@ -49,7 +47,7 @@ void	allocate_philosophers(t_info *info)
 	info->philos = philo;
 }
 
-void	assign_forks(t_philo *philo, t_info *info, int i)
+void	forks(t_philo *philo, t_info *info, int i)
 {
 	if (i % 2 == 0)
 	{
@@ -63,21 +61,22 @@ void	assign_forks(t_philo *philo, t_info *info, int i)
 	}
 }
 
-void	init_philosophers(t_info *info)
+int	init_philosophers(t_info *info)
 {
 	int	i;
 
 	i = 0;
 	allocate_philosophers(info);
 	if (!info->philos)
-		return ;
+		return (0);
 	while (i < info->number_philo)
 	{
 		info->philos[i].id = i + 1;
 		info->philos[i].info = info;
 		info->philos[i].last_meal_time = info->start_time;
 		info->philos[i].meals_eaten = 0;
-		assign_forks(&info->philos[i], info, i);
+		forks(&info->philos[i], info, i);
 		i++;
 	}
+	return (1);
 }
